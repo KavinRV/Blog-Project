@@ -9,15 +9,16 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", "sqlite:///blog.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -37,6 +38,7 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = relationship("Comment", back_populates="parent_post")
+    likes = db.Column(db.Integer)
 
 
 # User Table
@@ -48,6 +50,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(250), nullable=False)
     blog_posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="author")
+    total_likes = db.Column(db.Integer)
 
 
 # Comments Table
