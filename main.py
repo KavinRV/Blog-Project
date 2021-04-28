@@ -170,7 +170,7 @@ def contact():
 @app.route("/new-post", methods=["POST", "GET"])
 @admin_only
 def new_post():
-    form = CreatePostForm()
+    form = CreatePostForm(author=current_user.name)
     if form.validate_on_submit():
         new_blog = BlogPost(
             title=form.title.data,
@@ -194,7 +194,7 @@ def edit_post(post_id):
         title=post.title,
         subtitle=post.subtitle,
         body=post.body,
-        author=post.author,
+        author=str(post.author.name),
         img_url=post.img_url
     )
     if edit_form.validate_on_submit():
@@ -202,7 +202,7 @@ def edit_post(post_id):
         post.subtitle = edit_form.subtitle.data
         post.date = post.date
         post.body = edit_form.body.data
-        post.author = edit_form.author.data
+        post.author_id = current_user.id
         post.img_url = edit_form.img_url.data
         db.session.commit()
         return redirect(url_for("show_post", index=post.id))
