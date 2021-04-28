@@ -170,7 +170,7 @@ def contact():
 @app.route("/new-post", methods=["POST", "GET"])
 @admin_only
 def new_post():
-    form = CreatePostForm(author=current_user.name)
+    form = CreatePostForm(author=current_user.name, img_url='https://picsum.photos/1960/1267')
     if form.validate_on_submit():
         new_blog = BlogPost(
             title=form.title.data,
