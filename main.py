@@ -81,8 +81,6 @@ def admin_only(f):
     return decorated_function
 
 
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
