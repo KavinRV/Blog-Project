@@ -8,7 +8,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
             <h1>Kavin's Blog</h1>
-            <span class="subheading">All things that's of my interest</span>
+            <span class="subheading">Things that's of my interest</span>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <p class="post-meta">Posted by
             <a href="#">{{post.author.name}}</a>
             on {{post.date}}
-            {% if current_user.id in [post.author_id, 1]: %}
+            {% if current_user.id == 1: %}
             <a href="{{url_for('delete', post_id=post.id )}}">delete</a>
             {% endif %}
           </p>
